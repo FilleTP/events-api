@@ -10,6 +10,8 @@ Rails.application.routes.draw do
         sessions: 'api/v1/users/sessions',
         registrations: 'api/v1/users/registrations'
       }
+
+      resources :events, only: [:index, :show, :edit, :new, :create]
     end
   end
 end
