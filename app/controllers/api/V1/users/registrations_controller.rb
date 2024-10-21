@@ -3,10 +3,10 @@ module Api
   module V1
     class Users::RegistrationsController < Devise::RegistrationsController
       respond_to :json
-      
+
       private
 
-      def respond_with(current_user, _opts = {})
+      def respond_with(resource, _opts = {})
         if resource.persisted?
           render json: {
             status: { code: 200, message: 'Signed up successfully.'},
@@ -14,7 +14,7 @@ module Api
           }
         else
           render json: {
-            status: { message: "User couldn't be created successfully. #{current_user.errors.full_messages.to_sentence}"}
+            status: { message: "User couldn't be created successfully. #{resource.errors.full_messages.to_sentence}"}
           }, status: :unprocessable_entity
         end
       end
