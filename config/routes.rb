@@ -11,7 +11,9 @@ Rails.application.routes.draw do
         registrations: 'api/v1/users/registrations'
       }
 
-      resources :events, only: [:index, :show, :edit, :new, :create]
+      get '/profile', to: 'users#profile'
+
+      resources :events
     end
   end
 end

@@ -43,4 +43,31 @@ RSpec.describe 'User Login', type: :request do
       end
     end
   end
+
+  describe 'DELETE /api/v1/logout' do
+    context 'with valid token' do
+      it 'returns success message and deletes jwt token' do
+        post '/api/v1/login', params: valid_params
+        jwt_token = response.headers['Authorization']
+
+        delete '/api/v1/logout', headers: { 'Authorization': jwt_token }
+        expect(response).to have_http_status(:success)
+        expect(JSON.parse(response.body)['status']['message']).to eq('Logged out successfully.')
+
+
+        get '/api/v1/profile', headers: { 'Authorization': jwt_token }
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'with invalid token' do
+      it 'returns error message' do
+        delete '/api/v1/logout', headers: { 'Authorization': 'Bearer 123123'}
+
+        expect(response).to have_http_status(:unauthorized)
+        expect(JSON.parse(response.body)['message']).to eq('JWT token is invalid or expired')
+        expect(JSON.parse(response.body)['error_code']).to eq(100011)
+      end
+    end
+  end
 end
