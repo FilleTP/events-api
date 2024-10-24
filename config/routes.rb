@@ -10,6 +10,10 @@ Rails.application.routes.draw do
         sessions: 'api/v1/users/sessions',
         registrations: 'api/v1/users/registrations'
       }
+
+      get '/profile', to: 'users#profile'
+      resources :events
+      resources :categories, only: [:index]
     end
   end
 end

@@ -1,13 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  it { should have_db_column(:email).of_type(:string) }
-  it { should have_db_column(:encrypted_password).of_type(:string) }
+  describe 'db columns' do
+    it { should have_db_column(:email).of_type(:string) }
+    it { should have_db_column(:encrypted_password).of_type(:string) }
+  end
 
-  it { should validate_presence_of(:email) }
-  it { should validate_presence_of(:password) }
-  it { should validate_uniqueness_of(:email).case_insensitive }
-
+  describe 'validations' do
+    it { should validate_presence_of(:email) }
+    it { should validate_presence_of(:password) }
+    it { should validate_uniqueness_of(:email).case_insensitive }
+  end
+  
   describe 'password encryption' do
     it 'should encrypt the password' do
       user = create(:user, password: "password123")
