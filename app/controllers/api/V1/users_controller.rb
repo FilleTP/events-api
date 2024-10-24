@@ -5,7 +5,7 @@ module Api
       before_action :authenticate_user!
 
       def profile
-        render json: current_user
+        json_response 200, 'Fetched the user successfully', user: current_user
       end
     end
   end

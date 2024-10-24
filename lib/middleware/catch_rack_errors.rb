@@ -13,8 +13,13 @@ module Middleware
           { "Content-Type" => "application/json" },
           [
             {
-              message: 'JWT token is invalid or expired',
-              error_code: 100011
+              status: {
+                code: 401,
+                message: 'JWT token is invalid or expired.'
+              },
+              data: {
+                error_code: 100011
+              }
             }.to_json
           ]
         ]

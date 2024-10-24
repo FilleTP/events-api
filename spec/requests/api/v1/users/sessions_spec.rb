@@ -8,7 +8,6 @@ RSpec.describe 'User Login', type: :request do
       user: {
         email: 'test@example.com',
         password: 'password123',
-        password_confirmation: 'password123'
       }
     }
   end
@@ -18,7 +17,6 @@ RSpec.describe 'User Login', type: :request do
       user: {
         email: '',
         password: '',
-        password_confirmation: ''
       }
     }
   end
@@ -60,13 +58,13 @@ RSpec.describe 'User Login', type: :request do
       end
     end
 
-    context 'with invalid token' do
+    context 'with malformed token' do
       it 'returns error message' do
         delete '/api/v1/logout', headers: { 'Authorization': 'Bearer 123123'}
 
         expect(response).to have_http_status(:unauthorized)
-        expect(JSON.parse(response.body)['message']).to eq('JWT token is invalid or expired')
-        expect(JSON.parse(response.body)['error_code']).to eq(100011)
+        expect(JSON.parse(response.body)['status']['message']).to eq('JWT token is invalid or expired.')
+        expect(JSON.parse(response.body)['data']['error_code']).to eq(100011)
       end
     end
   end

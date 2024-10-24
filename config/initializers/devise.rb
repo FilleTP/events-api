@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 # Assuming you have not yet modified this file, each configuration option below
 # is set to its default value. Note that some are commented out while others
 # are not: uncommented lines are intended to protect your configuration from
@@ -281,8 +280,18 @@ Devise.setup do |config|
   #   manager.intercept_401 = false
   #   manager.default_strategies(scope: :user).unshift :some_external_strategy
   # end
-  config.warden do |warden|
-    warden.scope_defaults :user, store: false
+  #
+  Warden::Manager.after_set_user do |user, auth, opts|
+    Rails.logger.info "Warden after_set_user for user: #{user.email}" if user.present?
+  end
+
+  Warden::Manager.before_failure do |env, opts|
+    Rails.logger.error "Warden authentication failed: #{opts.inspect}, Env: #{env['warden.options'].inspect}"
+  end
+
+  config.warden do |manager|
+    manager.failure_app = CustomFailureApp
+    manager.scope_defaults :user, store: false
   end
 
   # ==> Mountable engine configurations

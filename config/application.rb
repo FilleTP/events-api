@@ -11,6 +11,7 @@ module EventsApi
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
     Dir[Rails.root.join('lib', 'middleware', '*.{rb}')].each { |file| require file }
+    Dir[Rails.root.join('lib', '*.{rb}')].each { |file| require file }
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

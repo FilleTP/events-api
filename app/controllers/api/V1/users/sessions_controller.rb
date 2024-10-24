@@ -7,10 +7,7 @@ module Api
       private
 
       def respond_with(current_user, _opts = {})
-        render json: {
-          status: { code: 200, message: 'Logged in successfully.'},
-          data: { user: UserSerializer.new(current_user).serializable_hash[:data][:attributes] }
-        }
+        json_response 200, 'Logged in successfully.', user: UserSerializer.new(current_user).serializable_hash[:data][:attributes]
       end
 
       def respond_to_on_destroy
@@ -21,16 +18,16 @@ module Api
             current_user = User.find_by(id: jwt_payload['sub'])
 
             if current_user
-              render json: { status: { code: 200, message: 'Logged out successfully.' } }, status: :ok
+              json_response 200, 'Logged out successfully.'
             else
-              render json: { status: { code: 401, message: "Couldn't find an active session." } }, status: :unauthorized
+              json_response 401, "Couldn't find an active session."
             end
 
           rescue JWT::DecodeError
-            return render json: { status: { code: 401, message: 'Invalid token.' } }, status: :unauthorized
+            json_response 401, 'JWT token is invalid or expired', error_code: 100011
           end
         else
-          return render json: { status: { code: 401, message: 'No token provided.' } }, status: :unauthorized
+          json_response 401, 'JWT token is invalid or expired', error_code: 100011
         end
       end
     end

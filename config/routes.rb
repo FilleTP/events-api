@@ -12,8 +12,8 @@ Rails.application.routes.draw do
       }
 
       get '/profile', to: 'users#profile'
-
       resources :events
+      resources :categories, only: [:index]
     end
   end
 end
