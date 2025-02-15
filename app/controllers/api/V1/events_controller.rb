@@ -16,11 +16,15 @@ module Api
       end
 
       def create
-        @event = current_user.events.build(event_params)
-        if @event.save
-          json_response 201, 'Event successfully created.', event: @event
+        response = Events::CreateEventUseCase.new(
+          params: event_params,
+          user: current_user,
+        ).call
+        
+        if response.success?
+          render json: { event: response.event }, status: :created
         else
-          json_response 422, "Event couldn't be created.", errors: @event.errors.full_messages
+          render json: { errors: response.errors }, status: :unproccessable_entity
         end
       end
 
